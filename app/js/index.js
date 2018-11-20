@@ -16,25 +16,13 @@ EmbarkJS.onReady((err) => {
        
         const message = document.getElementById('input-text').value;
 
-        // Send message via whisper
-        EmbarkJS.Messages.sendMessage({
-            topic: DEFAULT_CHANNEL, 
-            data: message
-        });
+        // TODO: Send message via whisper
     }
 
 
-    // Subscribe to whisper messages
-    EmbarkJS.Messages.listenTo({topic: [DEFAULT_CHANNEL]}, (error, message) => {
-        if(error){
-            alert("Error during subscription");
-            return;
-        }
+    // TODO: Subscribe to whisper messages
 
-        const {data, time} = message; 
-        addMessage(data, time);
-    });
-
+    
 
     const addMessage = (data, time) => {
         // Create new li for chat text 
