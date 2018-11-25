@@ -1,5 +1,7 @@
 import EmbarkJS from 'Embark/EmbarkJS';
+import web3 from 'Embark/web3';
 
+const PRIVATE_MESSAGE_REGEX = /^\/msg (0x[A-Za-z0-9]{130}) (.*)$/;
 const DEFAULT_CHANNEL = "default";
 
 EmbarkJS.onReady(async (err) => {
@@ -14,25 +16,47 @@ EmbarkJS.onReady(async (err) => {
     // Generate a symmetric key
     const channelSymKey = await web3.shh.generateSymKeyFromPassword(DEFAULT_CHANNEL);
 
+    // Obtain public key
+    const pubKey = await web3.shh.getPublicKey(EmbarkJS.Messages.currentMessages.sig);
+
+
     document.getElementById('chat-form').onsubmit = (e) => {
         e.preventDefault();
        
         const message = document.getElementById('input-text').value;
 
-        // Send message via whisper
-        EmbarkJS.Messages.sendMessage({
-            symKeyID: channelSymKey,
-            topic: DEFAULT_CHANNEL, 
-            data: message
-        });
+        if(message.startsWith('/msg')){
+            if(PRIVATE_MESSAGE_REGEX.test(message)){
+                const msgParts = message.match(PRIVATE_MESSAGE_REGEX);
+                const contactCode = msgParts[1];
+                const messageContent = msgParts[2];
+
+                // Send private message
+                EmbarkJS.Messages.sendMessage({
+                    pubKey: contactCode,
+                    topic: DEFAULT_CHANNEL,
+                    data: messageContent
+                });
+
+                // Since we cannot receive private messages sent to someone else, we need to add it manually on the UI
+                addMessage(messageContent, new Date().getTime()/1000);
+            }
+        } else {
+            // Send message via whisper
+            EmbarkJS.Messages.sendMessage({
+                symKeyID: channelSymKey,
+                topic: DEFAULT_CHANNEL, 
+                data: message
+            });
+        }
     }
 
 
-    // Subscribe to whisper messages
+    // Subscribe to public messages
     EmbarkJS.Messages.listenTo({
         topic: [DEFAULT_CHANNEL],
         symKeyID: channelSymKey
-    }, (error, message) => {
+    }, (error, message) => { 
         if(error){
             alert("Error during subscription");
             return;
@@ -42,6 +66,23 @@ EmbarkJS.onReady(async (err) => {
         addMessage(data, time);
     });
 
+    // Subscribe to private messages
+    EmbarkJS.Messages.listenTo({
+        usePrivateKey: true,
+        privateKeyID: EmbarkJS.Messages.currentMessages.sig
+    }, (error, message) => { 
+        if(error){
+            alert("Error during subscription");
+            return;
+        }
+
+        const {data, time} = message; 
+        addMessage(data, time);
+    });
+
+
+    const contactCode = document.getElementById('contact-code')
+    contactCode.innerHTML = pubKey;
 
     const addMessage = (data, time) => {
         // Create new li for chat text 
