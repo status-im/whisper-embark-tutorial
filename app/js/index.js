@@ -2,7 +2,7 @@ import EmbarkJS from 'Embark/EmbarkJS';
 
 const DEFAULT_CHANNEL = "default";
 
-EmbarkJS.onReady((err) => {
+EmbarkJS.onReady(async (err) => {
     if(err){
         alert("EmbarkJS is not available");
         return;
@@ -10,6 +10,9 @@ EmbarkJS.onReady((err) => {
 
     const channelName = document.getElementById('channel-name')
     channelName.innerHTML = DEFAULT_CHANNEL;
+
+    // TODO: Generate a symmetric key
+
 
     document.getElementById('chat-form').onsubmit = (e) => {
         e.preventDefault();
