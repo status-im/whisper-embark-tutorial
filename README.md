@@ -63,11 +63,11 @@ EmbarkJS.Messages.sendMessage({
 * `topic`, optional when using private keys. Can be an array of strings, or a string that contains the topic for the messages. Will be automatically encoded to a 4 bytes hex string(s).
 
 
-#### `// TODO: Subscribe to whisper messages`
+#### `// TODO: Subscribe to public messages`
 To receive the messages sent via Whisper, Embark offers a `EmbarkJS.Messages.listenTo(options)` that helps us obtain messages based in the `options` used to filter the messages. Let's implement this functionality, calling the function addMessage(data, time) each time a message is received:
 
 ```
-// Subscribe to whisper messages
+// Subscribe to public messages
 EmbarkJS.Messages.listenTo({
     topic: [DEFAULT_CHANNEL],
     symKeyID: channelSymKey

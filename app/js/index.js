@@ -1,5 +1,7 @@
 import EmbarkJS from 'Embark/EmbarkJS';
+import web3 from 'Embark/web3';
 
+const PRIVATE_MESSAGE_REGEX = /^\/msg (0x[A-Za-z0-9]{130}) (.*)$/;
 const DEFAULT_CHANNEL = "default";
 
 EmbarkJS.onReady(async (err) => {
@@ -14,18 +16,45 @@ EmbarkJS.onReady(async (err) => {
     // TODO: Generate a symmetric key
 
 
+    // TODO: Obtain public key
+    const pubKey = "0x"
+
+
     document.getElementById('chat-form').onsubmit = (e) => {
         e.preventDefault();
        
         const message = document.getElementById('input-text').value;
+        if(message.startsWith('/msg')){
+            if(PRIVATE_MESSAGE_REGEX.test(message)){
+                const msgParts = message.match(PRIVATE_MESSAGE_REGEX);
+                const contactCode = msgParts[1];
+                const messageContent = msgParts[2];
 
-        // TODO: Send message via whisper
+                // TODO: Send private message
+                
+
+
+
+                // Since we cannot receive private messages sent to someone else, we need to add it manually on the UI
+                addMessage(messageContent, new Date().getTime()/1000);
+            }
+        } else {
+            // TODO: Send message via whisper
+        }
     }
 
 
-    // TODO: Subscribe to whisper messages
+    // TODO: Subscribe to public messages
 
     
+
+    // TODO: Subscribe to private messages
+
+
+
+
+    const contactCode = document.getElementById('contact-code')
+    contactCode.innerHTML = pubKey;
 
     const addMessage = (data, time) => {
         // Create new li for chat text 
