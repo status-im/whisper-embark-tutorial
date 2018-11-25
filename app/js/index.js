@@ -2,7 +2,7 @@ import EmbarkJS from 'Embark/EmbarkJS';
 
 const DEFAULT_CHANNEL = "default";
 
-EmbarkJS.onReady((err) => {
+EmbarkJS.onReady(async (err) => {
     if(err){
         alert("EmbarkJS is not available");
         return;
@@ -11,6 +11,9 @@ EmbarkJS.onReady((err) => {
     const channelName = document.getElementById('channel-name')
     channelName.innerHTML = DEFAULT_CHANNEL;
 
+    // Generate a symmetric key
+    const channelSymKey = await web3.shh.generateSymKeyFromPassword(DEFAULT_CHANNEL);
+
     document.getElementById('chat-form').onsubmit = (e) => {
         e.preventDefault();
        
@@ -18,6 +21,7 @@ EmbarkJS.onReady((err) => {
 
         // Send message via whisper
         EmbarkJS.Messages.sendMessage({
+            symKeyID: channelSymKey,
             topic: DEFAULT_CHANNEL, 
             data: message
         });
@@ -25,7 +29,10 @@ EmbarkJS.onReady((err) => {
 
 
     // Subscribe to whisper messages
-    EmbarkJS.Messages.listenTo({topic: [DEFAULT_CHANNEL]}, (error, message) => {
+    EmbarkJS.Messages.listenTo({
+        topic: [DEFAULT_CHANNEL],
+        symKeyID: channelSymKey
+    }, (error, message) => {
         if(error){
             alert("Error during subscription");
             return;
