@@ -93,6 +93,8 @@ Just like with `sendMessage`, `listenTo` also accepts an option object, with the
 After adding this code, open two instances of the chat application and write a message. You'll see how it gets displayed in both windows
 
 ## Final thoughts
-Building a dApp that uses Whisper with Embark is something amazingly easy. You could easily extend this tutorial dapp to support private messages, just like we did in our previous tutorial for [Getting started with Whisper](https://status.im/research/tutorial_basic_cli.html). Even through Embark lets you use Whisper in your dApps, it does not mean that anyone will be able to use it when browsing your dApp. This is due to this protocol not being enabled in most providers. You'll need to connect to a node that supports this feature (i.e. `geth` with the `--shh` flag). 
+Building a dApp that uses Whisper with Embark is something amazingly easy. You could easily extend this tutorial dapp to support private messages, just like we did in our previous tutorial for [Getting started with Whisper](https://status.im/research/tutorial_basic_cli.html).
+
+Something that you must consider is that even through Embark lets you use Whisper in your dApps, it does not mean that anyone will be able to use it when browsing your dApp. This is due to this protocol not being enabled in most providers. You'll need to connect to a node that supports this feature (i.e. `geth` with the `--shh` flag). 
 
 Things will change in the future once Whisper gains more traction. Let's work together in building dApps that communicate between each other via Whisper!
