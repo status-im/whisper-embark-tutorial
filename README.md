@@ -33,7 +33,7 @@ The file `./app/js/index.js` is full of `TODO`s that we need to work with. You'l
 
 
 #### `// TODO: Generate a symmetric key`
-In our chat application, public messages are sent to a channel represented by a shared symmetric key whose "password" is just the channel we'll be using and listening to. "Public" messages are messages encrypted using this known symmetric key and topic, since they are not addressed to anyone in particular and are received by anyone that's listening in a specific channel. 
+In our chat application, public messages are sent to a channel represented by a shared symmetric key whose "password" is just the channel we'll be using and listening to. "Public" messages are messages encrypted using this known symmetric key and filtered using topics, since they are not addressed to anyone in particular and are received by anyone that's listening in a specific channel. 
 
 ```
 // Generate a symmetric key
